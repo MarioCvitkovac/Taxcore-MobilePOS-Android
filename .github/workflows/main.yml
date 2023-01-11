@@ -24,27 +24,5 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: TestNaziv
-          path: ./app/build/outputs/apk/Build/debug/app-debug.apk
-          
-      - name: Download Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: TestNaziv
-          
-      - name: Create release        
-        uses: actions/create-release@v1
-        id: create_release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: TestNaziv
-          release_name: TestNaziv
-          
-      - name: Publish release         
-        uses: csexton/release-asset-action@v2
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}         
-          files: |
-            TestNaziv
-          release-url: testtest         
+          name: Build
+          path: ./app/build/outputs/apk/
