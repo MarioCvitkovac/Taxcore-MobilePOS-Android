@@ -23,11 +23,10 @@ jobs:
         
       - uses: Tlaster/android-sign@v1
         name: Sign app APK
+        id: sign_app
         with:
-          releaseDirectory: |
-            app/build/outputs/apk/release
+          releaseDirectory: app/build/outputs/apk/release
           signingKeyBase64: ${{ secrets.SIGNING_KEY }}
-          output: build/release/signed
           alias: ${{ secrets.ALIAS }}
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
@@ -46,4 +45,4 @@ jobs:
           prerelease: false
           files: |
             ./app/build/outputs/apk/debug/app-debug.apk
-            ./app/build/outputs/apk/release/app-release-unsigned.apk
+            ./app/build/outputs/apk/release/app-release.apk
