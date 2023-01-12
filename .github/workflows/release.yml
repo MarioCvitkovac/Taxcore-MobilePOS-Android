@@ -21,7 +21,7 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
         
-      - uses: Tlaster/android-sign@v1
+      - uses: r0adkll/sign-android-release@v1
         name: Sign app APK
         id: sign_app
         with:
