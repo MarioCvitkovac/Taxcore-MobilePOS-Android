@@ -3,6 +3,18 @@ name: Release
 on:
   workflow_dispatch:
   
+permissions:
+  actions: read|write
+  checks: read|write
+  contents: read|write
+  deployments: read|write
+  issues: read|write
+  packages: read|write
+  pull-requests: read|write
+  repository-projects: read|write
+  security-events: read|write
+  statuses: read|write
+  
   
 jobs:
   release-apk:
@@ -34,7 +46,7 @@ jobs:
       - name: Create Github Release
         uses: softprops/action-gh-release@v1
         with:
-          token: ${{ secrets.android }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: aa
           draft: false
           prerelease: false
