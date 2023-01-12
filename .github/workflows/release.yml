@@ -20,17 +20,23 @@ jobs:
         
       - name: Build with Gradle
         run: ./gradlew build
-        env:
-          ALIAS: ${{secrets.ALIAS}}
-          KEY_PASSWORD: ${{secrets.KEY_PASSWORD}}
-          KEY_STORE_PASSWORD: ${{secrets.KEY_STORE_PASSWORD}}
-          SIGNING_KEY: ${{secrets.SIGNING_KEY}}
+        
+      - uses: Tlaster/android-sign@v1
+        name: Sign app APK
+        with:
+          releaseDirectory: |
+            app/build/outputs/apk/release
+          signingKeyBase64: ${{ secrets.SIGNING_KEY }}
+          output: build/release/signed
+          alias: ${{ secrets.ALIAS }}
+          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
         
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
           name: Build
-          path: ./app/build/outputs/apk/        
+          path: ./app/build/     
           
       - name: Create Github Release
         uses: softprops/action-gh-release@v1
