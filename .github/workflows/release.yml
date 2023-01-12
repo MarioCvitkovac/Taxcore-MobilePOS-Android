@@ -3,17 +3,21 @@ name: Release
 on:
   workflow_dispatch:
   
+  
 jobs:
   release-apk:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+      
       - name: set up JDK
         uses: actions/setup-java@v1
         with:
           java-version: 18
+          
       - name: Make Gradle executable
         run: chmod +x ./gradlew
+        
       - name: Build with Gradle
         run: ./gradlew build
         env:
@@ -21,9 +25,11 @@ jobs:
           KEY_PASSWORD: ${{secrets.KEY_PASSWORD}}
           KEY_STORE_PASSWORD: ${{secrets.KEY_STORE_PASSWORD}}
           SIGNING_KEY: ${{secrets.SIGNING_KEY}}
+          
       - name: Create Github Release
         uses: softprops/action-gh-release@v1
         with:
+          tags: v*
           draft: false
           prerelease: false
           files: |
