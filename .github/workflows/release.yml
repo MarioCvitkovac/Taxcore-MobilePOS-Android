@@ -26,6 +26,9 @@ jobs:
           KEY_STORE_PASSWORD: ${{secrets.KEY_STORE_PASSWORD}}
           SIGNING_KEY: ${{secrets.SIGNING_KEY}}
           
+      - name: Check if output folder exists
+        run: ls $(./app/build/outputs/apk)
+          
       - name: Create Github Release
         uses: softprops/action-gh-release@v1
         with:
