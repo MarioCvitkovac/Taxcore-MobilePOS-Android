@@ -19,7 +19,7 @@ jobs:
       - name: Build
         run: |
           chmod +x ./gradlew
-          ./gradlew clean app:assembleDebug
+          ./gradlew clean app:assembleRelease
           
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
