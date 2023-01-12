@@ -40,9 +40,10 @@ jobs:
       - name: Create Github Release
         uses: softprops/action-gh-release@v1
         with:
+          token: ${{ github.android }}
           tag_name: a
           draft: false
           prerelease: false
           files: |
             ./app/build/outputs/apk/debug/app-debug.apk
-            ./app/build/outputs/apk/release/app-release.apk
+            ./app/build/outputs/apk/release/app-release-unsigned.apk
