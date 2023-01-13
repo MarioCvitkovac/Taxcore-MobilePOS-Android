@@ -3,19 +3,6 @@ name: Release
 on:
   workflow_dispatch:
   
-permissions:
-  actions: write
-  checks: write
-  contents: write
-  deployments: write
-  issues: write
-  packages: write
-  pull-requests: write
-  repository-projects: write
-  security-events: write
-  statuses: write
-  
-  
 jobs:
   release-apk:
     runs-on: ubuntu-latest
@@ -32,6 +19,9 @@ jobs:
         
       - name: Build with Gradle
         run: ./gradlew build
+        
+      - name: Rename apk file
+        run: mv app/build/outputs/apk/release/app-release-unsigned.apk app/build/outputs/apk/release/Taxcore-MobilePOS.apk
         
       - uses: r0adkll/sign-android-release@v1
         name: Sign app APK
@@ -52,4 +42,4 @@ jobs:
           prerelease: false
           files: |
             ./app/build/outputs/apk/debug/app-debug.apk
-            ./app/build/outputs/apk/release/app-release-unsigned-signed.apk
+            ./app/build/outputs/apk/release/Taxcore-MobilePOS-signed.apk
