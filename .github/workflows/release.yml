@@ -52,14 +52,14 @@ jobs:
       - name: Create Tag
         uses: Yanjingzhu/FirstJSAction@v1.3
         with:            
-          tag: ${{ needs.build.outputs.semVer }}         
-          message: ${{ needs.build.outputs.semVer }}
+          tag: ${{ steps.build.outputs.semVer }}         
+          message: ${{ steps.build.outputs.semVer }}
           token: ${{ secrets.GITHUB_TOKEN }}          
           
       - name: Create Github Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ needs.build.outputs.semVer }}
+          tag_name: ${{ steps.build.outputs.semVer }}
           token: ${{ secrets.GITHUB_TOKEN }}
           draft: false
           prerelease: false
