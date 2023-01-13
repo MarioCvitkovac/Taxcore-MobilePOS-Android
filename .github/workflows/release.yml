@@ -47,14 +47,7 @@ jobs:
           signingKeyBase64: ${{ secrets.SIGNING_KEY }}
           alias: ${{ secrets.ALIAS }}
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
-          keyPassword: ${{ secrets.KEY_PASSWORD }} 
-          
-      - name: Create Tag
-        uses: Yanjingzhu/FirstJSAction@v1.3
-        with:            
-          tag: ${{ steps.build.outputs.semVer }}         
-          message: ${{ steps.build.outputs.semVer }}
-          token: ${{ secrets.GITHUB_TOKEN }}          
+          keyPassword: ${{ secrets.KEY_PASSWORD }}      
           
       - name: Create Github Release
         uses: softprops/action-gh-release@v1
