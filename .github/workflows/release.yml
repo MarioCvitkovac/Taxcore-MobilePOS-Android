@@ -1,9 +1,5 @@
 name: Release
 
-env:
- SEMVER: ${{ needs.gitversion.outputs.semVer }}
-
-
 on:
   workflow_dispatch:
   
