@@ -49,11 +49,18 @@ jobs:
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }} 
           
+      - name: Create Tag
+        uses: Yanjingzhu/FirstJSAction@v1.3
+        with:            
+          tag: ${{ needs.build.outputs.semVer }}         
+          message: ${{ needs.build.outputs.semVer }}
+          commit: ${{ needs.build.outputs.gitSha }}
+          token: ${{ secrets.GITHUB_TOKEN }}          
+          
       - name: Create Github Release
         uses: softprops/action-gh-release@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag_name: ${{ needs.build.outputs.semVer }}
           draft: false
           prerelease: false
           files: |
