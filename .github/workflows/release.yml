@@ -6,8 +6,6 @@ on:
 jobs:
   release-apk:
     runs-on: ubuntu-latest
-    env:
-      SEMVER: ${{ needs.release-apk.outputs.semVer }}
     outputs:
       semVer: ${{ steps.gitversion.outputs.semVer }}
       
@@ -31,9 +29,11 @@ jobs:
         with:
           useConfigFile: true
           configFilePath: .github/workflows/GitVersion.yml  
-          run: |
-          echo SemVer: $SEMVER 
-        
+          
+      - uses: apexskier/github-semver-parse@v1
+        id: semver
+        with:
+          version: ${{ steps.gitversion.outputs.VERSION }}          
           
       - name: Make Gradle executable
         run: chmod +x ./gradlew
@@ -57,7 +57,7 @@ jobs:
       - name: Create Github Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: $SEMVER 
+          tag_name: ${{ steps.version.outputs.VERSION }}
           token: ${{ secrets.GITHUB_TOKEN }}
           draft: false
           prerelease: false
