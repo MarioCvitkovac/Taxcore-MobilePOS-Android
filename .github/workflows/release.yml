@@ -1,5 +1,9 @@
 name: Release
 
+env:
+ SEMVER: ${{ needs.gitversion.outputs.semVer }}
+
+
 on:
   workflow_dispatch:
   
@@ -28,7 +32,19 @@ jobs:
         uses: gittools/actions/gitversion/execute@v0.9.13
         with:
           useConfigFile: true
-          configFilePath: .github/workflows/GitVersion.yml           
+          configFilePath: .github/workflows/GitVersion.yml  
+          
+  display-semver:
+    name: Display Semantic Version
+    runs-on: ubuntu-latest
+    needs: release-apk
+    env:
+      SEMVER: ${{ needs.release-apk.outputs.semVer }}
+      
+    steps:
+      - name: Display version
+        run: |
+          echo SemVer: $SEMVER   
           
       - name: Make Gradle executable
         run: chmod +x ./gradlew
@@ -52,7 +68,7 @@ jobs:
       - name: Create Github Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ needs.gitversion.outputs.semVer }}
+          tag_name: ${{ steps.release-apk.outputs.semVer }}
           token: ${{ secrets.GITHUB_TOKEN }}
           draft: false
           prerelease: false
