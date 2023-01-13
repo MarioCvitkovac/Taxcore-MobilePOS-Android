@@ -6,12 +6,10 @@ on:
 jobs:
   release-apk:
     runs-on: ubuntu-latest
-    outputs:
-      semVer: ${{ steps.gitversion.outputs.semVer }}
       
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v1   
       
       - name: Set up JDK
         uses: actions/setup-java@v1
@@ -30,10 +28,15 @@ jobs:
           useConfigFile: true
           configFilePath: .github/workflows/GitVersion.yml  
           
+      - name: Get the version
+        id: version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+        shell: bash    
+        
       - uses: apexskier/github-semver-parse@v1
         id: semver
         with:
-          version: ${{ steps.gitversion.outputs.VERSION }}          
+          version: ${{ steps.version.outputs.VERSION }}        
           
       - name: Make Gradle executable
         run: chmod +x ./gradlew
@@ -57,7 +60,7 @@ jobs:
       - name: Create Github Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v1.0.0
+          tag_name: ${{ steps.version.outputs.VERSION }}
           token: ${{ secrets.GITHUB_TOKEN }}
           draft: false
           prerelease: false
