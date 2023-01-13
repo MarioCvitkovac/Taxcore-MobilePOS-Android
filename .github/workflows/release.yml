@@ -52,7 +52,7 @@ jobs:
       - name: Create Github Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ needs.calculate-version.outputs.semVer }}
+          tag_name: ${{ needs.gitversion.outputs.semVer }}
           token: ${{ secrets.GITHUB_TOKEN }}
           draft: false
           prerelease: false
