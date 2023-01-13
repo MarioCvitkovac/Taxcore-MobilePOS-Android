@@ -28,7 +28,7 @@ jobs:
         uses: gittools/actions/gitversion/execute@v0.9.13
         with:
           useConfigFile: true
-          configFilePath: .github/workflows/GitVersion.yml          
+          configFilePath: .github/workflows/GitVersion.yml           
           
       - name: Make Gradle executable
         run: chmod +x ./gradlew
@@ -59,7 +59,7 @@ jobs:
       - name: Create Github Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ steps.build.outputs.semVer }}
+          tag_name: ${{ needs.calculate-version.outputs.semVer }}
           token: ${{ secrets.GITHUB_TOKEN }}
           draft: false
           prerelease: false
