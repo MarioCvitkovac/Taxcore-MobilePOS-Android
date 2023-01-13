@@ -54,7 +54,6 @@ jobs:
         with:            
           tag: ${{ needs.build.outputs.semVer }}         
           message: ${{ needs.build.outputs.semVer }}
-          commit: ${{ needs.build.outputs.gitSha }}
           token: ${{ secrets.GITHUB_TOKEN }}          
           
       - name: Create Github Release
