@@ -19,15 +19,15 @@ jobs:
           java-version: 18
       - name: Extract version from gradle
         run: |
-          ANDROID_APP_VERSION_NAME=$(./gradlew -q printVersionName)
-          echo "ANDROID_APP_VERSION_NAME=${ANDROID_APP_VERSION_NAME}" >> $GITHUB_ENV
+          VERSION_NAME=$(grep -oP 'versionName "\K(.*)(?=")' app/build.gradle)
+          echo "::set-env name=VERSION_NAME::$VERSION_NAME"
           
       - name: Make Gradle executable
         run: chmod +x ./gradlew
         
       - name: Build with Gradle
         run: |
-         echo "Building version ${ANDROID_APP_VERSION_NAME}"
+         echo "Building version ${VERSION_NAME}"
          ./gradlew build
       
       
@@ -48,7 +48,7 @@ jobs:
       - name: Create Github Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ env.ANDROID_APP_VERSION_NAME }}
+          tag_name: ${{ env.VERSION_NAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
           draft: false
           prerelease: false
