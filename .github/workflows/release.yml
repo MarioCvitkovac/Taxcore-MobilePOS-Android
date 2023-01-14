@@ -6,43 +6,31 @@ on:
 jobs:
   release-apk:
     runs-on: ubuntu-latest
+    outputs:
+      semVer: ${{ steps.gitversion.outputs.semVer }}
       
     steps:
       - name: Checkout
-        uses: actions/checkout@v1   
+        uses: actions/checkout@v1
       
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
           java-version: 18
-          
-      - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0.9.13
-        with:
-          versionSpec: '5.x'
-
-      - name: Determine Version
-        id:   gitversion
-        uses: gittools/actions/gitversion/execute@v0.9.13
-        with:
-          useConfigFile: true
-          configFilePath: .github/workflows/GitVersion.yml  
-          
-      - name: Get the version
-        id: version
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-        shell: bash    
-        
-      - uses: apexskier/github-semver-parse@v1
-        id: semver
-        with:
-          version: ${{ steps.version.outputs.VERSION }}        
+      - name: Extract version from gradle
+        run: |
+          ANDROID_APP_VERSION_NAME=$(./gradlew -q printVersionName)
+          echo "ANDROID_APP_VERSION_NAME=${ANDROID_APP_VERSION_NAME}" >> $GITHUB_ENV
           
       - name: Make Gradle executable
         run: chmod +x ./gradlew
         
       - name: Build with Gradle
-        run: ./gradlew build
+        run: |
+         echo "Building version ${ANDROID_APP_VERSION_NAME}"
+         ./gradlew build
+      
+      
         
       - name: Rename apk file
         run: mv app/build/outputs/apk/release/app-release-unsigned.apk app/build/outputs/apk/release/Taxcore-MobilePOS.apk
@@ -60,7 +48,7 @@ jobs:
       - name: Create Github Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ steps.version.outputs.VERSION }}
+          tag_name: ${{ env.ANDROID_APP_VERSION_NAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
           draft: false
           prerelease: false
